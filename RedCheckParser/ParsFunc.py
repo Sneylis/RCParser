@@ -1,6 +1,20 @@
 import requests
-from bs4 import BeautifulSoup
+import selenium
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 import urllib3
+import json
+
+def read_json(json_file):
+    with open(json_file, 'r') as file:
+        data = json.load(file)
+
+
+    for host, cves in data.items():
+        for cve in cves:
+            print (host, cve)
+
 
 def ParsRC (json_file):
     urllib3.disable_warnings()
@@ -12,18 +26,24 @@ def ParsRC (json_file):
         "User-Agent": st_useragent
     }
 
-    response = requests.get("https://bdu.fstec.ru/vul", headers, verify=False)
+    driver = webdriver.Firefox()
+    driver.get('https://bdu.fstec.ru/vul')
 
-    soup = BeautifulSoup(response.content, 'html.parser')
-
-    input_item = soup.find('input', {'placeholder': 'Введите слово или словосочетание'})
-
-
-    print('sdsds',input_item)
+    f_CVE = driver.find_element(By.XPATH,'//*[@id="search"]')
 
 
+    f_CVE.send_keys('CVE-2024-2424')
+
+    try:
+        err = driver.find_element(By.XPATH,'/html/body/div[1]/div[3]/div/div[1]/div[1]/span')
+        print('None')
+    except:
+        pass
 
 
 
-ParsRC('output.json')
+
+test = read_json('output.json')
+
+print (test)
 
