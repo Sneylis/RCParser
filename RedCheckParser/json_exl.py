@@ -19,9 +19,9 @@ def write_data_to_excel(data, excel_file):
     df.to_excel(excel_file, index=False)
 
 
-def main():
-    json_file = 'output.json'
-    excel_file = 'output.xlsx'
+def main_json_exel():
+    json_file = 'current_cve.json'
+    excel_file = 'result.xlsx'
 
     data = read_json(json_file)
     write_data_to_excel(data, excel_file)

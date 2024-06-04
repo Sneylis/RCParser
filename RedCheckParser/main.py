@@ -1,7 +1,8 @@
 import fitz  # PyMuPDF
 import re
 import json
-
+import ParsFunc,json_exl
+import os
 def extract_data_from_pdf(pdf_path):
     # Открываем PDF файл
     document = fitz.open(pdf_path)
@@ -41,12 +42,72 @@ def write_data_to_json(data, output_file):
         json.dump(data, file, indent=4)
 
 def main():
-    pdf_path = 'KKB2_10.1.6.0.pdf'
+    print('Поместите файл pdf в папку и напишите его навзание')
+    pdf_path = str(input("Название файла --->   "))
     output_file = 'output.json'
+
+    print("начинаю работу")
 
     data = extract_data_from_pdf(pdf_path)
     write_data_to_json(data, output_file)
-    print(f'Data extracted and written to {output_file}')
+    ParsFunc.ParsRC()
+    json_exl.main_json_exel()
+
+    print('Готово файл с excel находиться в папке под именем result.xlsx')
+
+    c=""
+
+    while c != 'y' or c != 'yes' or c != "no" or c != "n":
+        print ("Удалить файлы pdf и json которые остались во время выполнения процесса ?\n yes(y)/no(n)")
+        c = str(input("--->"))
+        if c == "yes" or c == "y":
+            os.remove(pdf_path)
+            os.remove('output.json')
+            os.remove('current_cve.json')
+
+            print ("""
+                        ______              
+           .d$$$******$$$$c.        
+        .d$P"            "$$c      
+       $$$$$.           .$$$*$.    
+     .$$ 4$L*$$.     .$$Pd$  '$b   
+     $F   *$. "$$e.e$$" 4$F   ^$b  
+    d$     $$   z$$$e   $$     '$. 
+    $P     `$L$$P` `"$$d$"      $$ 
+    $$     e$$F       4$$b.     $$ 
+    $b  .$$" $$      .$$ "4$b.  $$ 
+    $$e$P"    $b     d$`    "$$c$F 
+    '$P$$$$$$$$$$$$$$$$$$$$$$$$$$  
+     "$c.      4$.  $$       .$$   
+      ^$$.      $$ d$"      d$P    
+        "$$c.   `$b$F    .d$P"     
+          `4$$$c.$$$..e$$P"        
+              `^^^^^^^`
+            """)
+
+        elif c == 'no' or c == 'n':
+            print("""
+                                ______              
+                   .d$$$******$$$$c.        
+                .d$P"            "$$c      
+               $$$$$.           .$$$*$.    
+             .$$ 4$L*$$.     .$$Pd$  '$b   
+             $F   *$. "$$e.e$$" 4$F   ^$b  
+            d$     $$   z$$$e   $$     '$. 
+            $P     `$L$$P` `"$$d$"      $$ 
+            $$     e$$F       4$$b.     $$ 
+            $b  .$$" $$      .$$ "4$b.  $$ 
+            $$e$P"    $b     d$`    "$$c$F 
+            '$P$$$$$$$$$$$$$$$$$$$$$$$$$$  
+             "$c.      4$.  $$       .$$   
+              ^$$.      $$ d$"      d$P    
+                "$$c.   `$b$F    .d$P"     
+                  `4$$$c.$$$..e$$P"        
+                      `^^^^^^^`
+                    """)
+
+        else:
+            c = ""
 
 if __name__ == "__main__":
     main()
