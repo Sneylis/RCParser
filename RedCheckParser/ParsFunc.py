@@ -1,12 +1,14 @@
 import time
 
-import requests
-import selenium
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import urllib3
 import json
+from bs4 import BeautifulSoup
 
 
 
@@ -23,7 +25,7 @@ def ParsRC ():
     driver = webdriver.Firefox()
     driver.get('https://bdu.fstec.ru/vul')
 
-    f_CVE = driver.find_element(By.XPATH,'//*[@id="search"]')
+
 
     with open('output.json', 'r') as file:
         data = json.load(file)
@@ -34,21 +36,28 @@ def ParsRC ():
         for host,cves in data.items():
             bdu_data[str(host)] = []
             if cves:
+
                 for cve in cves:
+                    f_CVE = driver.find_element(By.XPATH,'//*[@id="select2-chosen-17"]')
+                    f_CVE.click()
+                    s_CVE = driver.find_element(By.XPATH,'//*[@id="s2id_autogen17_search"]')
                     print(host)
-                    f_CVE.clear()
-                    f_CVE.send_keys(cve[4:])
-                    time.sleep(5)
+                    s_CVE.clear()
+                    s_CVE.send_keys(cve[4:])
+                    time.sleep(6)
                     try:
-                        err = driver.find_element(By.XPATH,'/html/body/div[1]/div[3]/div/div[1]/div[1]/span')
-                        print('None')
+                        s_CVE.send_keys(Keys.ENTER)
+                        b_CVE = driver.find_element(By.XPATH,'/html/body/div[1]/div[3]/div/div[2]/div/div[2]/form/div[11]/input[2]').click()
+                        b_CVE = driver.find_element(By.XPATH,'/html/body/div[1]/div[3]/div/div[1]/div[1]/table/tbody/tr/td[1]/h4/a')
+                        if b_CVE:
+                            bdu_data[host].extend(cve)
                     except:
-                        bdu_data[host].extend(cve)
+                        print('None')
 
     with open('current_cve.json', 'w') as file:
         json.dump(bdu_data, file, indent=4)
 
-
+ParsRC()
 
 
 
