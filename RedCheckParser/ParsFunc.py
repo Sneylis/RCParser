@@ -32,12 +32,14 @@ def ParsRC ():
 
 
         bdu_data = {}
+        CVES = []
 
         for host,cves in data.items():
             bdu_data[str(host)] = []
             if cves:
 
                 for cve in cves:
+                    time.sleep(3)
                     f_CVE = driver.find_element(By.XPATH,'//*[@id="select2-chosen-17"]')
                     f_CVE.click()
                     s_CVE = driver.find_element(By.XPATH,'//*[@id="s2id_autogen17_search"]')
@@ -47,13 +49,18 @@ def ParsRC ():
                     time.sleep(6)
                     try:
                         s_CVE.send_keys(Keys.ENTER)
+                        time.sleep(6)
                         b_CVE = driver.find_element(By.XPATH,'/html/body/div[1]/div[3]/div/div[2]/div/div[2]/form/div[11]/input[2]').click()
+                        time.sleep(6)
                         b_CVE = driver.find_element(By.XPATH,'/html/body/div[1]/div[3]/div/div[1]/div[1]/table/tbody/tr/td[1]/h4/a')
                         if b_CVE:
-                            bdu_data[host].extend(cve)
+                            CVES.append(cve)
+                            print(cve)
                     except:
                         print('None')
 
+
+                bdu_data[host].extend(CVES)
     with open('current_cve.json', 'w') as file:
         json.dump(bdu_data, file, indent=4)
 
