@@ -39,32 +39,34 @@ def ParsRC ():
             if cves:
 
                 for cve in cves:
-                    time.sleep(3)
-                    f_CVE = driver.find_element(By.XPATH,'//*[@id="select2-chosen-17"]')
-                    f_CVE.click()
-                    s_CVE = driver.find_element(By.XPATH,'//*[@id="s2id_autogen17_search"]')
-                    print(host)
-                    s_CVE.clear()
-                    s_CVE.send_keys(cve[4:])
-                    time.sleep(6)
+
                     try:
-                        s_CVE.send_keys(Keys.ENTER)
+                        time.sleep(3)
+                        f_CVE = driver.find_element(By.XPATH,'//*[@id="select2-chosen-17"]')
+                        f_CVE.click()
+                        s_CVE = driver.find_element(By.XPATH,'//*[@id="s2id_autogen17_search"]')
+                        print(host)
+                        s_CVE.clear()
+                        s_CVE.send_keys(cve[4:])
                         time.sleep(6)
-                        b_CVE = driver.find_element(By.XPATH,'/html/body/div[1]/div[3]/div/div[2]/div/div[2]/form/div[11]/input[2]').click()
-                        time.sleep(6)
-                        b_CVE = driver.find_element(By.XPATH,'/html/body/div[1]/div[3]/div/div[1]/div[1]/table/tbody/tr/td[1]/h4/a')
-                        if b_CVE:
-                            CVES.append(cve)
-                            print(cve)
+                        try:
+                            s_CVE.send_keys(Keys.ENTER)
+                            time.sleep(6)
+                            b_CVE = driver.find_element(By.XPATH,'/html/body/div[1]/div[3]/div/div[2]/div/div[2]/form/div[11]/input[2]').click()
+                            time.sleep(6)
+                            b_CVE = driver.find_element(By.XPATH,'/html/body/div[1]/div[3]/div/div[1]/div[1]/table/tbody/tr/td[1]/h4/a')
+                            if b_CVE:
+                                CVES.append(cve)
+                                print(cve)
+                        except:
+                            print('None')
+
                     except:
-                        print('None')
+                        bdu_data[host].extend(CVES)
 
-
-                bdu_data[host].extend(CVES)
     with open('current_cve.json', 'w') as file:
         json.dump(bdu_data, file, indent=4)
 
-ParsRC()
 
 
 

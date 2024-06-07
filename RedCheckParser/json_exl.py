@@ -25,8 +25,5 @@ def main_json_exel():
 
     data = read_json(json_file)
     write_data_to_excel(data, excel_file)
-    print(f'Data written to {excel_file}')
+    print(f'вам повезло оно отработало {excel_file}')
 
-
-if __name__ == "__main__":
-    main()
